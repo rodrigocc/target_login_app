@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../components/input_field.dart';
+
+import 'text_editor_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,10 +24,11 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.all(32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   const Center(
                     child: SizedBox(
@@ -104,7 +106,16 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                  )
+                  ),
+                  Center(
+                    child: GestureDetector(
+                      child: const Text(
+                        'Política de Privacidade',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onTap: () {},
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -116,6 +127,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void loginUser() {
     if (_formKey.currentState!.validate()) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const TextEditorPage()));
       print('login realizado com sucesso');
     }
   }
