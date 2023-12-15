@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:target_sistemas/features/login/presentation/controller/login_controller.dart';
 
 class EditTextCard extends StatefulWidget {
   final String textTitle;
-  const EditTextCard({super.key, required this.textTitle});
+  final VoidCallback? onTap;
+  final VoidCallback? onEdit;
+  const EditTextCard(
+      {super.key, required this.textTitle, this.onTap, this.onEdit});
 
   @override
   State<EditTextCard> createState() => _EditTextCardState();
 }
 
 class _EditTextCardState extends State<EditTextCard> {
+  final controller = LoginController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,10 +30,10 @@ class _EditTextCardState extends State<EditTextCard> {
                 widget.textTitle,
                 overflow: TextOverflow.fade,
               ),
-              const Icon(Icons.edit),
               GestureDetector(
-                child: const Icon(Icons.cancel),
-              ),
+                  onTap: widget.onEdit, child: const Icon(Icons.edit)),
+              GestureDetector(
+                  onTap: widget.onTap, child: const Icon(Icons.cancel)),
             ],
           ),
         ),

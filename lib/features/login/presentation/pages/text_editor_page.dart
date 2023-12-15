@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:target_sistemas/features/login/presentation/controller/login_controller.dart';
 import '../../../../config/injection_container.dart';
 import '../components/edit_text_card.dart';
 
@@ -11,24 +13,41 @@ class TextEditorPage extends StatefulWidget {
 }
 
 class _TextEditorPageState extends State<TextEditorPage> {
+  final loginController = LoginController();
+  List<String>? removedList = [];
+
   final TextEditingController textEditController = TextEditingController();
 
-  List<String>? cachedList = [];
-  List<String>? listCachedInputed = [];
-
-  final List<String> textInputted = [];
-
   final prefs = serviceLocator<SharedPreferences>();
+
+  late FocusNode myFocusNode;
+
+  String currentEditTextIndex = '';
 
   @override
   void initState() {
     super.initState();
+    myFocusNode = FocusNode();
 
-    cachedList = prefs.getStringList('inputedList');
-    listCachedInputed = prefs.getStringList('cachedList');
-    cachedList!.addAll(listCachedInputed!.map((e) => e));
+    loginController.cachedList = prefs.getStringList('cachedList');
+  }
 
-    print(cachedList);
+  @override
+  void dispose() {
+    super.dispose();
+    myFocusNode.dispose();
+  }
+
+  void deleteTextInputed(int index) {
+    loginController.cachedList!.removeAt(index);
+    removedList = loginController.cachedList!;
+
+    prefs.setStringList('cachedList', removedList!);
+  }
+
+  void editTextInput(int index, String newText) {
+    loginController.cachedList![index] = newText;
+    removedList = loginController.cachedList!;
   }
 
   @override
@@ -51,12 +70,23 @@ class _TextEditorPageState extends State<TextEditorPage> {
                 ),
                 child: ListView.builder(
                   itemBuilder: (_, index) => EditTextCard(
-                      textTitle: cachedList!.isNotEmpty
-                          ? cachedList![index]
-                          : textInputted[index]),
-                  itemCount: cachedList!.isNotEmpty
-                      ? cachedList!.length
-                      : textInputted.length,
+                      onEdit: () {
+                        currentEditTextIndex = index.toString();
+                        myFocusNode.requestFocus();
+                      },
+                      onTap: () {
+                        setState(() {
+                          deleteTextInputed(index);
+                        });
+
+                        print(loginController.cachedList);
+                      },
+                      textTitle: loginController.cachedList!.isNotEmpty
+                          ? loginController.cachedList![index]
+                          : loginController.textInputted[index]),
+                  itemCount: loginController.cachedList!.isNotEmpty
+                      ? loginController.cachedList!.length
+                      : loginController.textInputted.length,
                   shrinkWrap: true,
                 ),
               ),
@@ -74,15 +104,16 @@ class _TextEditorPageState extends State<TextEditorPage> {
                     boxShadow: const [BoxShadow()]),
                 padding: const EdgeInsets.all(16),
                 child: TextField(
+                  focusNode: myFocusNode,
                   onSubmitted: (value) {
                     setState(() {
-                      cachedList!.isEmpty
-                          ? textInputted.add(value)
-                          : cachedList!.add(value);
+                      currentEditTextIndex.isEmpty
+                          ? loginController.cachedList!.add(value)
+                          : editTextInput(
+                              int.parse(currentEditTextIndex), value);
 
-                      cachedList!.isEmpty
-                          ? prefs.setStringList('inputedList', textInputted)
-                          : prefs.setStringList('cachedList', cachedList!);
+                      prefs.setStringList(
+                          'cachedList', loginController.cachedList!);
                     });
                     textEditController.clear();
                   },
