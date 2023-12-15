@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:target_sistemas/features/login/presentation/components/edit_text_card.dart';
+import '../../../../config/injection_container.dart';
+import '../components/edit_text_card.dart';
 
 class TextEditorPage extends StatefulWidget {
   const TextEditorPage({super.key});
@@ -12,16 +13,22 @@ class TextEditorPage extends StatefulWidget {
 class _TextEditorPageState extends State<TextEditorPage> {
   final TextEditingController textEditController = TextEditingController();
 
-  late final SharedPreferences prefs;
+  List<String>? cachedList = [];
+  List<String>? listCachedInputed = [];
 
-  getPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-  }
+  final List<String> textInputted = [];
+
+  final prefs = serviceLocator<SharedPreferences>();
 
   @override
   void initState() {
     super.initState();
-    getPreferences();
+
+    cachedList = prefs.getStringList('inputedList');
+    listCachedInputed = prefs.getStringList('cachedList');
+    cachedList!.addAll(listCachedInputed!.map((e) => e));
+
+    print(cachedList);
   }
 
   @override
@@ -43,9 +50,13 @@ class _TextEditorPageState extends State<TextEditorPage> {
                   boxShadow: [BoxShadow()],
                 ),
                 child: ListView.builder(
-                  itemBuilder: (_, index) =>
-                      EditTextCard(textTitle: textInputted[index]),
-                  itemCount: textInputted.length,
+                  itemBuilder: (_, index) => EditTextCard(
+                      textTitle: cachedList!.isNotEmpty
+                          ? cachedList![index]
+                          : textInputted[index]),
+                  itemCount: cachedList!.isNotEmpty
+                      ? cachedList!.length
+                      : textInputted.length,
                   shrinkWrap: true,
                 ),
               ),
@@ -65,8 +76,13 @@ class _TextEditorPageState extends State<TextEditorPage> {
                 child: TextField(
                   onSubmitted: (value) {
                     setState(() {
-                      textInputted.add(value);
-                      prefs.setStringList('inputedList', textInputted);
+                      cachedList!.isEmpty
+                          ? textInputted.add(value)
+                          : cachedList!.add(value);
+
+                      cachedList!.isEmpty
+                          ? prefs.setStringList('inputedList', textInputted)
+                          : prefs.setStringList('cachedList', cachedList!);
                     });
                     textEditController.clear();
                   },
@@ -85,6 +101,4 @@ class _TextEditorPageState extends State<TextEditorPage> {
       ),
     );
   }
-
-  final List<String> textInputted = [];
 }
