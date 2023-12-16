@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:target_sistemas/features/login/presentation/controller/login_controller.dart';
+
 import '../../../../config/injection_container.dart';
 import '../components/edit_text_card.dart';
+import '../controller/login_controller.dart';
 
 class TextEditorPage extends StatefulWidget {
   const TextEditorPage({super.key});
@@ -75,9 +75,36 @@ class _TextEditorPageState extends State<TextEditorPage> {
                         myFocusNode.requestFocus();
                       },
                       onTap: () {
-                        setState(() {
-                          deleteTextInputed(index);
-                        });
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Confirmar Exclusão'),
+                              content: const Text(
+                                  'Deseja Realmente Excluir o Texto?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                  },
+                                  child: const Text('Cancelar'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      deleteTextInputed(index);
+                                    });
+
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                  },
+                                  child: const Text('Excluir'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
 
                         print(loginController.cachedList);
                       },
@@ -130,6 +157,33 @@ class _TextEditorPageState extends State<TextEditorPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showAlertDialog(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar Exclusão'),
+          content: const Text('Deseja Realmente Excluir o Texto?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Close'),
+            ),
+            TextButton(
+              onPressed: () {
+                deleteTextInputed(index);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Excluir'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
