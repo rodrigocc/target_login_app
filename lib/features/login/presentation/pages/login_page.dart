@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:target_sistemas/features/login/presentation/controller/login_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'text_editor_page.dart';
 
@@ -12,6 +14,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController loginController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  final Uri _url = Uri.parse('https://www.google.com/?&hl=pt-BR');
+
+  final controller = LoginController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -54,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: const InputDecoration(
                           icon: Icon(Icons.person),
                         ),
-                        validator: _validateUsername,
+                        validator: controller.validateUsername,
                       ),
                     ),
                   ),
@@ -84,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: const InputDecoration(
                           icon: Icon(Icons.lock),
                         ),
-                        validator: _validatePassword,
+                        validator: controller.validatePassword,
                       ),
                     ),
                   ),
@@ -110,11 +116,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Center(
                     child: GestureDetector(
+                      onTap: _launchUrl,
                       child: const Text(
                         'Política de Privacidade',
                         style: TextStyle(color: Colors.white),
                       ),
-                      onTap: () {},
                     ),
                   ),
                 ],
@@ -126,53 +132,17 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
   void loginUser() {
     if (_formKey.currentState!.validate()) {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const TextEditorPage()));
       print('login realizado com sucesso');
     }
-  }
-
-  String? _validateUsername(String? value) {
-    if (value!.length > 20) {
-      return 'Limite máximo de 20 Caracteres';
-    }
-
-    if (value.isEmpty) {
-      return 'Campo está vazio';
-    }
-
-    if (value.endsWith(' ')) {
-      return 'O login não deve terminar com caracter de espaço no final';
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value!.isEmpty) {
-      return 'Campo está vazio';
-    }
-
-    if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-      return 'A senha não deve conter caracteres especiais';
-    }
-
-    if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
-      return 'a senha deve conter apenas letras e números';
-    }
-
-    if (value.length > 20) {
-      return 'Limite máximo de 20 Caracteres';
-    }
-
-    if (value.length < 2) {
-      return 'Senha deve conter no mínimo 2 caracteres';
-    }
-
-    if (value.endsWith(' ')) {
-      return 'A senha não deve terminar com caracter de espaço no final';
-    }
-    return null;
   }
 }

@@ -29,7 +29,11 @@ class _TextEditorPageState extends State<TextEditorPage> {
     super.initState();
     myFocusNode = FocusNode();
 
-    loginController.cachedList = prefs.getStringList('cachedList');
+    if (prefs.getStringList('cachedList') != null) {
+      loginController.cachedList = prefs.getStringList('cachedList');
+    } else {
+      loginController.cachedList = [];
+    }
   }
 
   @override
@@ -40,14 +44,14 @@ class _TextEditorPageState extends State<TextEditorPage> {
 
   void deleteTextInputed(int index) {
     loginController.cachedList!.removeAt(index);
-    removedList = loginController.cachedList!;
+    removedList = loginController.cachedList;
 
     prefs.setStringList('cachedList', removedList!);
   }
 
   void editTextInput(int index, String newText) {
     loginController.cachedList![index] = newText;
-    removedList = loginController.cachedList!;
+    removedList = loginController.cachedList;
   }
 
   @override
