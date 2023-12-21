@@ -44,11 +44,16 @@ class _EditTextCardState extends State<EditTextCard> {
                 width: 20,
               ),
               GestureDetector(
-                  onTap: widget.onEdit, child: const Icon(Icons.edit)),
+                  onTap: widget.onEdit,
+                  child: const Icon(
+                    Icons.edit,
+                    size: 30,
+                  )),
               GestureDetector(
                   onTap: widget.onTap,
                   child: const Icon(
                     Icons.cancel,
+                    size: 30,
                     color: Color.fromARGB(255, 174, 15, 4),
                   )),
             ],

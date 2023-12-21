@@ -32,88 +32,91 @@ class _TextEditorPageState extends State<TextEditorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(13, 134, 145, 100),
-      body: Observer(builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Container(
-                  height: 300,
-                  width: 300,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [BoxShadow()],
-                  ),
-                  child: Observer(builder: (context) {
-                    return ListView.builder(
-                      itemBuilder: (_, index) => Observer(builder: (
-                        context,
-                      ) {
-                        return EditTextCard(
-                            onEdit: () {
-                              loginController.currentEditTextIndex =
-                                  index.toString();
-                              myFocusNode.requestFocus();
-                            },
-                            onTap: () {
-                              _showAlertDialog(context, index);
-                            },
-                            textTitle: loginController.cachedList!.isNotEmpty
-                                ? loginController.cachedList![index]
-                                : loginController.textInputted[index]);
-                      }),
-                      itemCount: loginController.cachedList!.isNotEmpty
-                          ? loginController.cachedList!.length
-                          : loginController.textInputted.length,
-                      shrinkWrap: true,
-                    );
-                  }),
+      backgroundColor: const Color.fromARGB(156, 24, 72, 76),
+      body: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: [
+          Color.fromARGB(156, 27, 85, 95),
+          Color.fromRGBO(16, 189, 204, 0.612),
+        ])),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Container(
+                height: 300,
+                width: 300,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [BoxShadow()],
                 ),
+                child: Observer(builder: (context) {
+                  return ListView.builder(
+                    itemBuilder: (_, index) => Observer(builder: (
+                      context,
+                    ) {
+                      return EditTextCard(
+                          onEdit: () {
+                            loginController.currentEditTextIndex =
+                                index.toString();
+                            myFocusNode.requestFocus();
+                          },
+                          onTap: () {
+                            _showAlertDialog(context, index);
+                          },
+                          textTitle: loginController.cachedList!.isNotEmpty
+                              ? loginController.cachedList![index]
+                              : loginController.textInputted[index]);
+                    }),
+                    itemCount: loginController.cachedList!.isNotEmpty
+                        ? loginController.cachedList!.length
+                        : loginController.textInputted.length,
+                    shrinkWrap: true,
+                  );
+                }),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              Center(
-                child: Container(
-                  width: 250,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: const [BoxShadow()]),
-                  padding: const EdgeInsets.all(16),
-                  child: TextField(
-                    focusNode: myFocusNode,
-                    onSubmitted: (value) {
-                      loginController.onSubmitted(value);
-                      loginController.textEditController.clear();
-                    },
-                    controller: loginController.textEditController,
-                    decoration: const InputDecoration(
-                      labelStyle: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                      border: InputBorder.none,
-                      label: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Digite seu Texto',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Center(
+              child: Container(
+                width: 250,
+                height: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: const [BoxShadow()]),
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  focusNode: myFocusNode,
+                  onSubmitted: (value) {
+                    loginController.onSubmitted(value);
+                    loginController.textEditController.clear();
+                  },
+                  controller: loginController.textEditController,
+                  decoration: const InputDecoration(
+                    labelStyle: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                    border: InputBorder.none,
+                    label: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Digite seu Texto',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                 ),
-              )
-            ],
-          ),
-        );
-      }),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 

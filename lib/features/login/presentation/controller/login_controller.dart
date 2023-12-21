@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../config/injection_container.dart';
+
 import '../../../../config/preference_instance.dart';
 
 part 'login_controller.g.dart';
@@ -33,7 +32,7 @@ abstract class _LoginControllerBase with Store {
 
   @action
   void onSubmitted(String value) {
-    currentEditTextIndex.isEmpty && value.isNotEmpty
+    currentEditTextIndex.isEmpty && textEditController.text.isNotEmpty
         ? cachedList!.add(value)
         : editTextInput(int.parse(currentEditTextIndex), value);
 
@@ -44,6 +43,7 @@ abstract class _LoginControllerBase with Store {
   void editTextInput(int index, String newText) {
     cachedList![index] = newText;
     removedList = cachedList;
+    currentEditTextIndex = '';
   }
 
   @action
