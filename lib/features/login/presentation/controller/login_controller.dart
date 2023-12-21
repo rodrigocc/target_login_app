@@ -33,7 +33,9 @@ abstract class _LoginControllerBase with Store {
   }
 
   @action
-  void onSubmitted(String value) {
+  void onSubmitted(
+    String value,
+  ) {
     currentEditTextIndex.isEmpty && textEditController.text.isNotEmpty
         ? cachedList!.add(value)
         : editTextInput(int.parse(currentEditTextIndex), value);
@@ -43,8 +45,10 @@ abstract class _LoginControllerBase with Store {
 
   @action
   void editTextInput(int index, String newText) {
-    cachedList![index] = newText;
-    removedList = cachedList;
+    if (textEditController.text.isNotEmpty) {
+      cachedList![index] = newText;
+      removedList = cachedList;
+    }
     currentEditTextIndex = '';
   }
 
