@@ -32,8 +32,8 @@ abstract class _LoginControllerBase with Store {
   }
 
   @action
-  void onSubmitted(value) {
-    currentEditTextIndex.isEmpty
+  void onSubmitted(String value) {
+    currentEditTextIndex.isEmpty && value.isNotEmpty
         ? cachedList!.add(value)
         : editTextInput(int.parse(currentEditTextIndex), value);
 

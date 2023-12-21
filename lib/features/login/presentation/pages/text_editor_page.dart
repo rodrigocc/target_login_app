@@ -94,9 +94,17 @@ class _TextEditorPageState extends State<TextEditorPage> {
                     },
                     controller: loginController.textEditController,
                     decoration: const InputDecoration(
-                      label: Text(
-                        'Digite seu Texto',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      labelStyle: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                      border: InputBorder.none,
+                      label: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Digite seu Texto',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),

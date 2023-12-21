@@ -18,40 +18,44 @@ class _EditTextCardState extends State<EditTextCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (context) {
-      return Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(boxShadow: [
-              BoxShadow(
-                color: Colors.white,
-              )
-            ], color: Colors.white),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.textTitle,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
-                  overflow: TextOverflow.visible,
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: const BoxDecoration(boxShadow: [
+            BoxShadow(
+              color: Colors.white,
+            )
+          ], color: Colors.white),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    widget.textTitle,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
                 ),
-                const Expanded(child: Text("")),
-                GestureDetector(
-                    onTap: widget.onEdit, child: const Icon(Icons.edit)),
-                GestureDetector(
-                    onTap: widget.onTap,
-                    child: const Icon(
-                      Icons.cancel,
-                      color: Color.fromARGB(255, 174, 15, 4),
-                    )),
-              ],
-            ),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              GestureDetector(
+                  onTap: widget.onEdit, child: const Icon(Icons.edit)),
+              GestureDetector(
+                  onTap: widget.onTap,
+                  child: const Icon(
+                    Icons.cancel,
+                    color: Color.fromARGB(255, 174, 15, 4),
+                  )),
+            ],
           ),
-          const Divider()
-        ],
-      );
-    });
+        ),
+        const Divider()
+      ],
+    );
   }
 }
