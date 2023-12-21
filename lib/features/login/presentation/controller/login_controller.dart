@@ -8,6 +8,10 @@ part 'login_controller.g.dart';
 class LoginController = _LoginControllerBase with _$LoginController;
 
 abstract class _LoginControllerBase with Store {
+  TextEditingController loginController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  final TextEditingController textEditController = TextEditingController();
+
   @observable
   String currentEditTextIndex = '';
 
@@ -18,8 +22,6 @@ abstract class _LoginControllerBase with Store {
   final List<String> textInputted = [];
   @observable
   List<String>? removedList = <String>[];
-
-  final TextEditingController textEditController = TextEditingController();
 
   void getCachedList() {
     if (prefs.getStringList('cachedList') != null) {

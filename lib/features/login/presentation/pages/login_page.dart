@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:target_sistemas/config/envs/envs.dart';
 import '../controller/login_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,11 +13,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController loginController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-  final Uri _url = Uri.parse('https://www.google.com/?&hl=pt-BR');
-
   final controller = LoginController();
 
   final _formKey = GlobalKey<FormState>();
@@ -59,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: TextFormField(
                     keyboardType: TextInputType.name,
-                    controller: loginController,
+                    controller: controller.loginController,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.person),
                     ),
@@ -90,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: TextFormField(
                     obscureText: true,
                     keyboardType: TextInputType.name,
-                    controller: passwordController,
+                    controller: controller.passwordController,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.lock),
                     ),
@@ -139,8 +135,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _launchUrl() async {
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
+    if (!await launchUrl(Enviroment.url)) {
+      throw Exception('Could not launch $Enviroment.url');
     }
   }
 
@@ -148,7 +144,6 @@ class _LoginPageState extends State<LoginPage> {
     if (_formKey.currentState!.validate()) {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const TextEditorPage()));
-      print('login realizado com sucesso');
     }
   }
 }

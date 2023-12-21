@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:target_sistemas/features/login/presentation/controller/login_controller.dart';
+
+import '../controller/login_controller.dart';
 
 class EditTextCard extends StatefulWidget {
   final String textTitle;
