@@ -1,18 +1,58 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../config/injection_container.dart';
+import '../../../../config/preference_instance.dart';
 
 part 'login_controller.g.dart';
 
 class LoginController = _LoginControllerBase with _$LoginController;
 
 abstract class _LoginControllerBase with Store {
-  List<String>? cachedList = [];
-  List<String>? listCachedInputed = [];
+  @observable
+  String currentEditTextIndex = '';
 
+  @observable
+  ObservableList<String>? cachedList = ObservableList<String>();
+
+  @observable
   final List<String> textInputted = [];
+  @observable
+  List<String>? removedList = <String>[];
+
+  final TextEditingController textEditController = TextEditingController();
+
+  void getCachedList() {
+    if (prefs.getStringList('cachedList') != null) {
+      cachedList =
+          ObservableList.of(prefs.getStringList('cachedList')!.toList());
+    } else {
+      cachedList = ObservableList<String>();
+    }
+  }
+
+  @action
+  void onSubmitted(value) {
+    currentEditTextIndex.isEmpty
+        ? cachedList!.add(value)
+        : editTextInput(int.parse(currentEditTextIndex), value);
+
+    prefs.setStringList('cachedList', cachedList!);
+  }
+
+  @action
+  void editTextInput(int index, String newText) {
+    cachedList![index] = newText;
+    removedList = cachedList;
+  }
 
   @action
   void deleteTextInputed(int index) {
     cachedList!.removeAt(index);
+
+    removedList = cachedList;
+
+    prefs.setStringList('cachedList', removedList!);
   }
 
   String? validateUsername(String? value) {

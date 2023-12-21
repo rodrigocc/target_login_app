@@ -31,11 +31,11 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.all(32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const Center(
                     child: SizedBox(
@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 50,
                   ),
                   Center(
                     child: Container(
@@ -113,6 +113,10 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                  ),
+                  Divider(
+                    color: Colors.transparent,
+                    height: MediaQuery.of(context).size.height * 0.3,
                   ),
                   Center(
                     child: GestureDetector(
